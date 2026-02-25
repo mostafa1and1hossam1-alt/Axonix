@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct",
+      "https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct",
       {
         method: "POST",
         headers: {
@@ -24,6 +24,9 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
+
+    // 🔥 اطبع الرد (سواء نجاح أو خطأ)
+    console.log("HuggingFace Response:", data);
 
     if (!response.ok) {
       console.error("HuggingFace Error:", data);
