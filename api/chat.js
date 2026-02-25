@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      "https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct-v0.2",
+      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
       {
         method: "POST",
         headers: {
@@ -23,10 +23,16 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
+    console.log("Raw Response:", text);
 
-    // 🔥 اطبع الرد (سواء نجاح أو خطأ)
-    console.log("HuggingFace Response:", data);
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error("Parse Error:", e);
+      return res.status(500).json({ error: text });
+    }
 
     if (!response.ok) {
       console.error("HuggingFace Error:", data);
