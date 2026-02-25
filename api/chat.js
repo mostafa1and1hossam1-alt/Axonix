@@ -9,29 +9,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7
-      })
-    });
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.HF_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          inputs: prompt
+        })
+      }
+    );
 
     const data = await response.json();
 
-    // 🔥 اطبع الخطأ لو فيه
     if (!response.ok) {
-      console.error("OpenAI Error:", data);
+      console.error("HuggingFace Error:", data);
       return res.status(500).json({ error: data });
     }
 
     return res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "No response"
+      reply: data[0]?.generated_text || "No response"
     });
 
   } catch (err) {
