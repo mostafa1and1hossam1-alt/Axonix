@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "functions": {
+    "chat.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
